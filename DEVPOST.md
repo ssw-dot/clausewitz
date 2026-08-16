@@ -54,7 +54,7 @@ Pegar tal cual en el editor de Devpost.
 ### Inspiration
 
 We went looking for funding for a small project. In one afternoon we read the
-rules of three open calls advertising **$224,000 between them**. Here is what
+rules of three open calls advertising **$223,765 between them**. Here is what
 the rules actually said:
 
 - **$148,445** — *"Grand Champion: $300 in Featherless AI credits."* The prize
@@ -252,5 +252,9 @@ any pre-existing work to be disclosed. Stating it plainly:
 - [ ] Menos de 5 minutos — el nuestro dura **2:39**
 - [ ] Repo público con **licencia MIT visible en About** ✅ ya verificado
 - [ ] AWS Builder ID pegado
-- [ ] Enlace de demo en vivo, si el endpoint está desplegado (**sube nota**)
-- [ ] Post en builder.aws.com (**puntos extra**)
+- [ ] Enlace de demo en vivo, si el endpoint está desplegado — textual de las
+      reglas: *"(Optional) Include a live demo link - this will help your Project
+      score better in the Technical Implementation Judging Criteria!"*
+- [ ] **Hasta 3 posts en builder.aws**, 0,2 puntos cada uno, **0,6 en total**.
+      Escritos y listos en `blog/`. Solo puntúan si el proyecto pasa a la fase 2.
+      Los títulos ya llevan *"Agents for Humans"* dentro, como exigen.

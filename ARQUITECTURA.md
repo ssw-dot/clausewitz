@@ -108,17 +108,17 @@ clausewitz/
   screening.py   The rules. Pure functions. No model, no network, no deps.
   normalise.py   Turning what a call says into what a check can compare.
   report.py      Three buckets, every exclusion carrying its clause.
-  cli.py         python -m clausewitz.cli  ·  --audit  ·  --json
+  cli.py         python -m clausewitz  ·  --audit  ·  --json  ·  --read
 fixtures/
   calls.json     Real calls, real wording, so every quote is traceable.
-tests/           46 tests. None needs a model, a network or a credential.
+tests/           67 tests. None needs a model, a network or a credential.
 ```
 
 ## Running it
 
 ```bash
-python -m clausewitz.cli            # the demo, no credentials
-python -m clausewitz.cli --audit    # prove every quote is verbatim
+python -m clausewitz                # the demo, no credentials
+python -m clausewitz --audit        # prove every quote is verbatim
 python -m unittest discover -s tests -p "test_*.py"
 ```
 

@@ -33,7 +33,7 @@ the disqualifying sentence quoted back to you.**
 ## What it does
 
 ```
-$ python -m clausewitz.cli
+$ python -m clausewitz
 
 Screening 8 open calls for: Biblioteca Vecinal San Andres
 
@@ -107,8 +107,8 @@ No account, no key, no network:
 
 ```bash
 git clone <this repo> && cd clausewitz
-python -m clausewitz.cli                          # the screening above
-python -m clausewitz.cli --audit                  # prove every quote is verbatim
+python -m clausewitz                              # the screening above
+python -m clausewitz --audit                      # prove every quote is verbatim
 python -m unittest discover -s tests -p "test_*.py"
 ```
 
@@ -124,7 +124,7 @@ To read a **new** call with the model:
 ```bash
 pip install "strands-agents[litellm]"
 export GOOGLE_API_KEY=...          # a free-tier key is enough
-python -m clausewitz.cli --read path/to/rules.txt
+python -m clausewitz --read path/to/rules.txt
 ```
 
 ## Architecture
