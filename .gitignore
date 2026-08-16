@@ -9,6 +9,7 @@ service-account*.json
 # Notas internas del proyecto. No forman parte del entregable: hablan de
 # estrategia de concurso, no del producto.
 DECISION.md
+DEVPOST.md
 
 __pycache__/
 *.py[cod]
