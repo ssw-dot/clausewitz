@@ -262,6 +262,25 @@ CHECKS: dict[str, Callable[[Requirement, Profile], "str | None"]] = {
 # Screening
 # --------------------------------------------------------------------------
 
+def _allowlist_already_satisfied(req: Requirement, p: Profile) -> bool:
+    """True when the profile matches this allow list on a term we did resolve.
+
+    Only allow lists qualify. Adding an unknown entry to a list of who MAY
+    enter cannot take anyone off it, so once the profile is on the list by a
+    term this code understood, the leftovers are irrelevant to the verdict.
+
+    Deliberately returns False for every deny list and for every other kind:
+    the safe direction here is to keep reporting.
+    """
+    if req.kind == "allowed_countries":
+        codes, _ = normalise.countries(req.value)
+        return p.country.upper() in set(codes)
+    if req.kind == "legal_form":
+        forms, _ = normalise.legal_forms(req.value)
+        return p.legal_form.lower() in {f.lower() for f in forms}
+    return False
+
+
 def screen(call: Call, profile: Profile) -> Result:
     """Decide, and be able to show why.
 
@@ -291,9 +310,21 @@ def screen(call: Call, profile: Profile) -> Result:
     # A place the call named and this code could not resolve is not noise. It
     # is a restriction whose effect on this profile is unknown, and the honest
     # answer to an unknown restriction is "someone look at this".
+    #
+    # With one exception, and the asymmetry is the reason for it. On an
+    # ALLOW list, an unrecognised entry can only ever widen who may enter --
+    # so once the profile already matches something on the list, whatever else
+    # is there cannot change the answer. Reporting it anyway sends a call that
+    # is plainly eligible to a human, and a screen that cries wolf on the easy
+    # cases stops being read on the hard ones.
+    #
+    # On a DENY list the same leftover is dangerous: it could be this very
+    # profile's country under a name the table does not carry. Unknown entries
+    # there always stop the screen.
     stray = tuple(
         (req, place)
         for req in verified
+        if not _allowlist_already_satisfied(req, profile)
         for place in unresolved_places(req)
     )
 
