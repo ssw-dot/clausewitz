@@ -1,0 +1,22 @@
+# Credenciales. Nunca, bajo ninguna circunstancia.
+.env
+.env.*
+*.key
+*.pem
+credentials.json
+service-account*.json
+
+# Notas internas del proyecto. No forman parte del entregable: hablan de
+# estrategia de concurso, no del producto.
+DECISION.md
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+.DS_Store
+Thumbs.db
+*.log

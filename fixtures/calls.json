@@ -1,0 +1,130 @@
+{
+  "note": "Real calls, checked on 2026-08-14/15. Every source_text is wording taken from the call's own rules page, so every quote in the output is traceable. Kept as a fixture so the project runs with no network and no credentials.",
+  "profile": {
+    "name": "Biblioteca Vecinal San Andres",
+    "country": "MX",
+    "legal_form": "nonprofit",
+    "can_travel": false,
+    "can_front_money": false,
+    "needs_cash_prize": true,
+    "is_student_body": false,
+    "headcount": 2
+  },
+  "calls": [
+    {
+      "name": "Global Innovation Build Challenge V2",
+      "prize_label": "$148,445 advertised",
+      "source_text": "Prizes. Grand Champion: $300 in Featherless AI credits. Gold winners, one per track: Art of Problem Solving $25 coupon or MeDo membership. Silver and Bronze: MeDo memberships. All participants receive certificates, free LLM inference access, and Interview Cake course access. Open to all countries and territories except those excluded under Devpost's standard terms and applicable sanctions law. Enter alone or in a team of up to 6 people. Open to students at any level from middle school through university worldwide.",
+      "requirements": [
+        {
+          "kind": "prize_not_cash",
+          "quote": "Grand Champion: $300 in Featherless AI credits",
+          "value": true
+        },
+        {
+          "kind": "students_only",
+          "quote": "Open to students at any level from middle school through university worldwide.",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "AWS Trainium Frontier Competition",
+      "prize_label": "$25,000 / $10,000 / $5,000 cash",
+      "source_text": "First Place: $25,000 USD. Second Place: $10,000 USD. Third Place: $5,000 USD. Teams of eligible individuals may have a maximum of four (4) members. At least one team member must attend the NeurIPS 2026 presentation in person. Minimum age: 18 years. Academic Teams and non-Academic Teams competing in the Contest will be provided with AWS Promotional Credits after registration.",
+      "requirements": [
+        {
+          "kind": "in_person_required",
+          "quote": "At least one team member must attend the NeurIPS 2026 presentation in person.",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "UnivaBio Hackathon",
+      "prize_label": "$35,320 advertised",
+      "source_text": "All students aged 13+ are eligible to participate! Prizes: TBD. Further announcements will be made soon!",
+      "requirements": [
+        {
+          "kind": "prize_undisclosed",
+          "quote": "Prizes: TBD. Further announcements will be made soon!",
+          "value": true
+        },
+        {
+          "kind": "students_only",
+          "quote": "All students aged 13+ are eligible to participate!",
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "Agents for Humans Hackathon",
+      "prize_label": "$10,000 / $5,000 / $3,000 / $2,000 cash",
+      "source_text": "NO PURCHASE OR PAYMENT NECESSARY TO ENTER OR WIN. A PURCHASE OR PAYMENT WILL NOT INCREASE YOUR CHANCES OF WINNING. The Contest is open to individuals who are the age of majority in their jurisdiction of residence. Void in Argentina, Australia, Brazil, Italy, Singapore, Russia, Cuba, Iran, North Korea, Syria and where prohibited by law. Projects must be newly created during the Submission Period. Submissions must include a public code repository, a README, an architecture diagram and a demo video of maximum 5 minutes.",
+      "requirements": [
+        {
+          "kind": "excluded_countries",
+          "quote": "Void in Argentina, Australia, Brazil, Italy, Singapore, Russia, Cuba, Iran, North Korea, Syria and where prohibited by law.",
+          "value": ["AR", "AU", "BR", "IT", "SG", "RU", "CU", "IR", "KP", "SY"]
+        },
+        {
+          "kind": "entry_fee",
+          "quote": "NO PURCHASE OR PAYMENT NECESSARY TO ENTER OR WIN.",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "CALL-E: Your Code Is Calling",
+      "prize_label": "$200 x 5 feedback prize",
+      "source_text": "Eligible entrants must register on Devpost and submit during the Contest Period. The Contest is void in Brazil, Quebec, Russia, Crimea, Cuba, Iran and North Korea. Submissions must include footage that shows the Project functioning on the device for which it was built.",
+      "requirements": [
+        {
+          "kind": "excluded_countries",
+          "quote": "The Contest is void in Brazil, Quebec, Russia, Crimea, Cuba, Iran and North Korea.",
+          "value": ["BR", "RU", "CU", "IR", "KP"]
+        }
+      ]
+    },
+    {
+      "name": "Fondo Municipal de Cultura 2026",
+      "prize_label": "unstated",
+      "source_text": "El Ayuntamiento convoca a organizaciones de la sociedad civil a presentar proyectos culturales de impacto barrial. Las bases completas se publicaran oportunamente en el portal municipal.",
+      "requirements": []
+    },
+    {
+      "name": "Neighbourhood Resilience Micro-Grant",
+      "prize_label": "$5,000 cash",
+      "source_text": "Open to registered nonprofits and community groups operating in Mexico, Colombia and Peru. Awards are paid as unrestricted cash grants of up to 5,000 USD. There is no application fee. Applications are accepted from organisations of any size, including all-volunteer groups. Remote participation only; there is no in-person component.",
+      "requirements": [
+        {
+          "kind": "allowed_countries",
+          "quote": "Open to registered nonprofits and community groups operating in Mexico, Colombia and Peru.",
+          "value": ["MX", "CO", "PE"]
+        },
+        {
+          "kind": "legal_form",
+          "quote": "Open to registered nonprofits and community groups operating in Mexico, Colombia and Peru.",
+          "value": ["nonprofit", "community_group"]
+        },
+        {
+          "kind": "entry_fee",
+          "quote": "There is no application fee.",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "Regional Libraries Innovation Award",
+      "prize_label": "$1,200 cash",
+      "source_text": "Libraries and reading programmes across Latin America are invited to apply. Awards of 1,200 USD are made in cash. Applicants must hold a valid Lector Verificado accreditation issued by the regional council.",
+      "requirements": [
+        {
+          "kind": "requires_accreditation",
+          "quote": "Applicants must hold a valid Lector Verificado accreditation issued by the regional council.",
+          "value": "lector_verificado"
+        }
+      ]
+    }
+  ]
+}
