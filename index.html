@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clausewitz — screen open calls, see the clause</title>
+<meta name="description" content="Clausewitz screens funding calls against what your organisation actually is, and quotes the clause that disqualifies you. This page runs the repository's own Python in your browser.">
+<style>
+:root {
+  --bg: #fbfaf8;  --panel: #ffffff;  --ink: #1c1b19;  --dim: #6c6862;
+  --line: #e3dfd8; --accent: #7a4f1d; --ok: #2f6d40; --bad: #a3352b;
+  --wait: #8a6a12; --term-bg: #171614; --term-ink: #e8e4dc;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131211; --panel: #1c1b19; --ink: #e8e4dc; --dim: #9a948a;
+    --line: #2f2d29; --accent: #d3a163; --ok: #7bbd8c; --bad: #e0857a;
+    --wait: #d9b95c; --term-bg: #0d0c0b; --term-ink: #e8e4dc;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.55 ui-serif, Georgia, "Times New Roman", serif;
+}
+.wrap { max-width: 62rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+h1 { font-size: 2.1rem; line-height: 1.15; margin: 0 0 .4rem; letter-spacing: -.01em; }
+h2 { font-size: 1.15rem; margin: 2.4rem 0 .6rem; letter-spacing: .01em; }
+.lede { font-size: 1.15rem; color: var(--dim); margin: 0 0 2rem; max-width: 46rem; }
+p { max-width: 46rem; }
+a { color: var(--accent); }
+code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
+.panel {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 10px; padding: 1.1rem 1.25rem; margin: 1rem 0;
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .85rem 1.4rem; }
+label { display: block; font-size: .78rem; text-transform: uppercase;
+        letter-spacing: .07em; color: var(--dim); margin-bottom: .3rem; }
+select, input[type=text], input[type=number] {
+  width: 100%; padding: .45rem .55rem; font: inherit; font-size: .95rem;
+  background: var(--bg); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 6px;
+}
+.check { display: flex; align-items: flex-start; gap: .55rem; margin: .1rem 0; }
+.check input { margin-top: .35rem; flex: none; }
+.check span { font-size: .95rem; }
+.check small { display: block; color: var(--dim); font-size: .82rem; }
+
+.bar { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin: 1.2rem 0 .4rem; }
+button {
+  font: inherit; font-size: .95rem; padding: .5rem 1.05rem; cursor: pointer;
+  background: var(--ink); color: var(--bg);
+  border: 1px solid var(--ink); border-radius: 6px;
+}
+button.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+button[disabled] { opacity: .45; cursor: progress; }
+.status { color: var(--dim); font-size: .9rem; }
+
+.term {
+  background: var(--term-bg); color: var(--term-ink); border-radius: 10px;
+  padding: 1.15rem 1.25rem; overflow-x: auto; font-size: .86rem; line-height: 1.5;
+  white-space: pre; margin: 1rem 0; border: 1px solid var(--line);
+}
+.term .hd  { color: #e8e4dc; font-weight: 700; }
+.term .yes { color: #7bbd8c; }
+.term .no  { color: #e0857a; }
+.term .huh { color: #d9b95c; }
+.term .q   { color: #a9c7e8; }
+.term .dim { color: #8b857b; }
+
+ul { max-width: 46rem; }
+li { margin: .35rem 0; }
+.foot { margin-top: 3.5rem; padding-top: 1.2rem; border-top: 1px solid var(--line);
+        color: var(--dim); font-size: .92rem; }
+.note { border-left: 3px solid var(--accent); padding-left: .9rem; color: var(--dim); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Clausewitz</h1>
+<p class="lede">Small organisations lose weeks writing applications they were never
+eligible for. Clausewitz reads open calls against what you actually are, and
+quotes the clause that disqualifies you.</p>
+
+<p class="note">This page is not a re-implementation. It fetches
+<code>clausewitz/screening.py</code>, <code>normalise.py</code> and
+<code>report.py</code> from this repository and runs them in your browser under
+CPython. If the code changes, this demo changes with it. Nothing is sent
+anywhere — the screening layer has no network calls and needs no credentials,
+which is exactly why it can run here at all.</p>
+
+<h2>1. Say what your organisation is</h2>
+
+<div class="panel">
+  <div class="grid">
+    <div>
+      <label for="name">Name</label>
+      <input type="text" id="name" value="Biblioteca Vecinal San Andres">
+    </div>
+    <div>
+      <label for="country">Country (ISO alpha-2)</label>
+      <input type="text" id="country" value="MX" maxlength="2" list="cc">
+      <datalist id="cc">
+        <option value="MX"><option value="US"><option value="BR"><option value="ES">
+        <option value="IT"><option value="GB"><option value="DE"><option value="IN">
+        <option value="AU"><option value="AR"><option value="CO"><option value="RU">
+      </datalist>
+    </div>
+    <div>
+      <label for="form">Legal form</label>
+      <select id="form">
+        <option value="nonprofit" selected>nonprofit</option>
+        <option value="individual">individual</option>
+        <option value="company">company</option>
+        <option value="cooperative">cooperative</option>
+        <option value="academic">academic</option>
+        <option value="government">government</option>
+        <option value="student_group">student_group</option>
+      </select>
+    </div>
+    <div>
+      <label for="head">Headcount</label>
+      <input type="number" id="head" value="2" min="1" max="500">
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:1rem">
+    <label class="check"><input type="checkbox" id="travel">
+      <span>Can send someone in person<small>flights, hotels, a visa</small></span></label>
+    <label class="check"><input type="checkbox" id="front">
+      <span>Can pay costs and be reimbursed later<small>most small orgs cannot</small></span></label>
+    <label class="check"><input type="checkbox" id="cash" checked>
+      <span>Needs cash, not credits<small>vouchers do not pay a bill</small></span></label>
+    <label class="check"><input type="checkbox" id="student">
+      <span>Is a student body<small>some calls are students only</small></span></label>
+  </div>
+</div>
+
+<h2>2. Screen eight real calls</h2>
+
+<p>The bundled calls are real. Their wording is quoted from their own rules —
+three of them are hackathons we read while looking for funding for this project,
+and the reason we built the tool.</p>
+
+<div class="bar">
+  <button id="run" disabled>Screen the calls</button>
+  <button id="audit" class="ghost" disabled>Verify every quote is verbatim</button>
+  <span class="status" id="status">loading CPython…</span>
+</div>
+
+<pre class="term" id="out">Waiting for the runtime. This takes a few seconds the first time — it is
+downloading a real Python interpreter, not a JavaScript imitation of one.</pre>
+
+<h2>Why the quote, and not just the answer</h2>
+
+<p>A tool that says <em>no</em> without showing why has to be trusted completely
+or not at all — and nobody should trust this completely. It is reading legal-ish
+prose with a language model. Handing you the sentence changes what it is: it
+stops being an oracle and becomes a reader that points. When it is right you
+saved six hours; when it is wrong you notice at once, because the evidence came
+attached.</p>
+
+<p>So there are three buckets, never two. A call that says nothing about who may
+enter is not a call that admits everyone — it is a call a person has to read.
+Every ambiguity fails towards <strong>needs a human</strong>, never towards
+<strong>not eligible</strong>:</p>
+
+<ul>
+  <li>a quote not found in the source text</li>
+  <li>a rule this screener has no check for</li>
+  <li>a place named that cannot be resolved to a country</li>
+  <li>nothing extracted at all</li>
+</ul>
+
+<p><strong>Wrongly telling someone not to apply costs them a grant. Wrongly
+asking a human to look costs them a minute.</strong></p>
+
+<h2>The model reads. The code decides.</h2>
+
+<p>A <a href="https://strandsagents.com/">Strands</a> agent is given one job:
+report each demand a call makes on who may enter, quoting the sentence it came
+from. It has one tool, <code>report_requirement</code>, and no vocabulary for a
+verdict. Then ordinary Python — the module running on this page — decides.</p>
+
+<p>What enforces the split is a function, not a prompt. Every requirement must
+quote text that appears <strong>verbatim</strong> in the source. A requirement
+the model invented quotes nothing that exists, fails the check, and is dropped
+before any rule sees it. <strong>A hallucination cannot become a
+rejection.</strong> That is the button marked <em>verify every quote</em>, and it
+is the same code that runs in CI.</p>
+
+<p>Reading a <em>new</em> call needs the model, so it lives in the command line
+only:</p>
+
+<pre class="term">pip install "strands-agents[litellm]"
+export GOOGLE_API_KEY=...
+python -m clausewitz --read path/to/rules.txt</pre>
+
+<div class="foot">
+  MIT licensed ·
+  <a href="https://github.com/ssw-dot/clausewitz">github.com/ssw-dot/clausewitz</a> ·
+  built for the Agents for Humans hackathon, Good Neighbor Agents track.
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const out = $("out"), status = $("status");
+
+// The bootstrap deliberately imports the repository's own modules rather than
+// restating any rule here. A demo that reimplements the logic it is
+// demonstrating can drift from it, and then it is advertising, not evidence.
+const BOOTSTRAP = `
+import json, sys
+sys.path.insert(0, "/demo")
+from clausewitz.screening import Call, Profile, Requirement, screen_all, quote_is_grounded
+from clausewitz.report import render
+
+DATA = json.loads(open("/demo/calls.json", encoding="utf-8").read())
+
+def _calls():
+    return [
+        Call(name=c["name"], source_text=c["source_text"],
+             prize_label=c.get("prize_label", ""),
+             requirements=tuple(
+                 Requirement(kind=r["kind"], quote=r["quote"], value=r.get("value"))
+                 for r in c.get("requirements", [])))
+        for c in DATA["calls"]
+    ]
+
+def run(profile_json):
+    p = Profile(**json.loads(profile_json))
+    return render(screen_all(_calls(), p), p.name)
+
+def audit():
+    lines, bad, total = [], 0, 0
+    for call in _calls():
+        for req in call.requirements:
+            total += 1
+            ok = quote_is_grounded(req.quote, call.source_text)
+            if not ok:
+                bad += 1
+            lines.append(("ok   " if ok else "BAD  ") + call.name + " :: " + req.kind)
+    lines.append("")
+    lines.append(str(total - bad) + "/" + str(total) +
+                 " quotes found verbatim in their source text.")
+    if bad:
+        lines.append("A quote that cannot be found is discarded, never trusted.")
+    return "\\n".join(lines)
+`;
+
+let py = null;
+
+async function boot() {
+  py = await loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/" });
+  status.textContent = "fetching the repository's own source…";
+
+  const files = ["screening.py", "normalise.py", "report.py"];
+  const [srcs, fixture] = await Promise.all([
+    Promise.all(files.map(f => fetch("clausewitz/" + f).then(r => {
+      if (!r.ok) throw new Error("could not fetch clausewitz/" + f + " (" + r.status + ")");
+      return r.text();
+    }))),
+    fetch("fixtures/calls.json").then(r => {
+      if (!r.ok) throw new Error("could not fetch fixtures/calls.json (" + r.status + ")");
+      return r.text();
+    }),
+  ]);
+
+  py.FS.mkdirTree("/demo/clausewitz");
+  // Written empty on purpose: the package's real __init__ is not needed to run
+  // the screening layer, and fetching a leading-underscore file is the one
+  // thing a static host is likely to swallow.
+  py.FS.writeFile("/demo/clausewitz/__init__.py", "");
+  files.forEach((f, i) => py.FS.writeFile("/demo/clausewitz/" + f, srcs[i]));
+  py.FS.writeFile("/demo/calls.json", fixture);
+
+  py.runPython(BOOTSTRAP);
+  status.textContent = "ready — CPython " + py.runPython("__import__('sys').version.split()[0]");
+  $("run").disabled = false;
+  $("audit").disabled = false;
+  screen();
+}
+
+function profileJSON() {
+  return JSON.stringify({
+    name: $("name").value.trim() || "This organisation",
+    country: ($("country").value.trim() || "MX").toUpperCase(),
+    legal_form: $("form").value,
+    can_travel: $("travel").checked,
+    can_front_money: $("front").checked,
+    needs_cash_prize: $("cash").checked,
+    is_student_body: $("student").checked,
+    headcount: Math.max(1, parseInt($("head").value, 10) || 1),
+  });
+}
+
+// Colour by section rather than by keyword. An earlier version of this
+// highlighting read the words in each line and painted "NOT ELIGIBLE" green,
+// because it matched "eligible" first. Tracking which bucket we are inside
+// cannot make that mistake.
+function paint(text) {
+  let cls = "";
+  return text.split("\n").map(line => {
+    if (/^ELIGIBLE \(/.test(line))      cls = "yes";
+    else if (/^NOT ELIGIBLE \(/.test(line)) cls = "no";
+    else if (/^CANNOT DECIDE \(/.test(line)) cls = "huh";
+    else if (/^Screening /.test(line))  cls = "";
+    const esc = line.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+    if (/^(ELIGIBLE|NOT ELIGIBLE|CANNOT DECIDE) \(/.test(line))
+      return '<span class="hd ' + cls + '">' + esc + "</span>";
+    if (/^\s+"/.test(line)) return '<span class="q">' + esc + "</span>";
+    if (/^\s+->/.test(line)) return '<span class="dim">' + esc + "</span>";
+    if (/^\s{4,}\S/.test(line)) return '<span class="dim">' + esc + "</span>";
+    return cls ? '<span class="' + cls + '">' + esc + "</span>" : esc;
+  }).join("\n");
+}
+
+function screen() {
+  try {
+    out.innerHTML = paint(py.globals.get("run")(profileJSON()));
+  } catch (e) {
+    out.textContent = "The run failed, and that is worth showing rather than hiding:\n\n" + e;
+  }
+}
+
+$("run").addEventListener("click", screen);
+$("audit").addEventListener("click", () => {
+  out.innerHTML = paint(py.globals.get("audit")());
+});
+// Re-screen as the profile changes: the point of the demo is watching the
+// verdicts move when the organisation does.
+["name", "country", "form", "head", "travel", "front", "cash", "student"]
+  .forEach(id => $(id).addEventListener("change", () => { if (py) screen(); }));
+
+boot().catch(e => {
+  status.textContent = "failed to start";
+  out.textContent = "This demo could not start:\n\n" + e +
+    "\n\nThe command line version needs none of this:\n" +
+    "  git clone https://github.com/ssw-dot/clausewitz\n" +
+    "  python -m clausewitz";
+});
+</script>
+</body>
+</html>

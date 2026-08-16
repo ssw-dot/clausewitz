@@ -18,11 +18,28 @@ WRAP = 76
 
 
 def _quote(text: str, indent: str = "        ") -> str:
+    """Wrap a quoted sentence so the quotation marks bracket the whole thing.
+
+    The obvious one-liner closes the quote at the end of the FIRST line:
+
+        "At least one team member must attend the NeurIPS 2026 presentation in"
+         person.
+
+    which tells the reader the citation ended three words early and leaves the
+    rest looking like our own commentary. In a tool whose entire promise is
+    "here is the sentence that disqualifies you", the boundary of the sentence
+    is not decoration.
+    """
     body = " ".join(text.split())
     if len(body) > 240:
         body = body[:237] + "..."
-    return "\n".join(indent + '"' + line + '"' if i == 0 else indent + " " + line
-                     for i, line in enumerate(textwrap.wrap(body, WRAP)))
+    lines = textwrap.wrap(body, WRAP - 1)   # -1 leaves room for the quote mark
+    if not lines:
+        return indent + '""'
+    if len(lines) == 1:
+        return f'{indent}"{lines[0]}"'
+    middle = [f"{indent} {line}" for line in lines[1:-1]]
+    return "\n".join([f'{indent}"{lines[0]}', *middle, f'{indent} {lines[-1]}"'])
 
 
 def render(results: list[Result], profile_name: str) -> str:
