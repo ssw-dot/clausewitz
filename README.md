@@ -11,7 +11,7 @@ Agents** · [MIT licensed](LICENSE)
 ## The problem, and how we found it
 
 We went looking for funding for a small project. In one afternoon we read the
-rules of three open calls advertising **$224,000 between them**. Here is what
+rules of three open calls advertising **$223,765 between them**. Here is what
 the rules actually said:
 
 | Advertised | The sentence that ended it |
@@ -83,7 +83,7 @@ and is dropped.
 data point, which pushes the call towards a human.
 
 That guarantee is not a claim about the prompt. It is a property of the code,
-and it is tested 61 times without ever calling a model.
+and it is tested 73 times without ever calling a model.
 
 ### Three buckets, because two is a lie
 
@@ -129,25 +129,10 @@ python -m clausewitz --read path/to/rules.txt
 
 ## Architecture
 
-Full diagram and rationale in **[ARQUITECTURA.md](ARQUITECTURA.md)**.
+![The model reads, the code decides](architecture.png)
 
-```
-rules text ──► Strands Agent ──► Requirement{kind, quote, value}
-                                        │
-                                        ▼
-                            quote_is_grounded()?          ◄── the gate
-                          ┌─────────────┴─────────────┐
-                       no │                           │ yes
-                          ▼                           ▼
-                    UNDECIDABLE            screening.py  ◄── profile
-                                          (pure functions,
-                                           no model, no net)
-                                                │
-                              ┌─────────────────┼─────────────────┐
-                              ▼                 ▼                 ▼
-                          ELIGIBLE          EXCLUDED         UNDECIDABLE
-                                          + the clause
-```
+
+Full diagram and rationale in **[ARQUITECTURA.md](ARQUITECTURA.md)**.
 
 ## Built with
 

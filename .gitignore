@@ -11,6 +11,10 @@ service-account*.json
 DECISION.md
 DEVPOST.md
 
+# Previsualizacion que escribe make_diagram.py al trabajar.
+_prev.png
+_crop.png
+
 __pycache__/
 *.py[cod]
 .venv/
